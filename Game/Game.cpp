@@ -3,6 +3,8 @@
 
 #include <iostream>
 
+// Random comment
+
 int main()
 {
     SDL_Init(SDL_INIT_VIDEO);
