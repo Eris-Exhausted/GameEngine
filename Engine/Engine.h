@@ -1,5 +1,7 @@
 #pragma once
 
 #include "Renderer.h"
+#include "Input.h"
 
-void fnEngine();
+#include "Random.h"
+#include "Vector2.h"

@@ -25,33 +25,45 @@ namespace nu {
         }
         return true;
     }
+
     void Renderer::ShutDown()
     {
         SDL_DestroyRenderer(m_renderer);
         SDL_DestroyWindow(m_window);
         SDL_Quit();
     }
-    void Renderer::SetColor(Uint8 r, Uint8 g, Uint8 b, Uint8 a)
+
+    void Renderer::SetColorInt(Uint8 r, Uint8 g, Uint8 b, Uint8 a)
     {
         SDL_SetRenderDrawColor(m_renderer ,r, g, b, a);
     }
+
+    void Renderer::SetColor(float r, float g, float b, float a)
+    {
+        SDL_SetRenderDrawColorFloat(m_renderer, r, g, b, a);
+    }
+
     void Renderer::Clear()
     {
         SDL_RenderClear(m_renderer);
     }
+
     void Renderer::Present()
     {
         SDL_RenderPresent(m_renderer);
     }
+
     void Renderer::DrawPoint(float x, float y)
     {
         SDL_RenderPoint(m_renderer, x, y);
     }
+
     void Renderer::DrawFillRect(float x, float y, float w, float h)
     {
         SDL_FRect rect{ x, y, w, h };
         SDL_RenderFillRect(m_renderer, &rect);
     }
+
     void Renderer::DrawRect(float x, float y, float w, float h)
     {
         SDL_FRect rect{ x, y, w, h };

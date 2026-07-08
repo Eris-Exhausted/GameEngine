@@ -1,0 +1,43 @@
+#pragma once
+#include "Vector2.h"
+
+#include <vector>
+
+namespace nu 
+{
+	class Input
+	{
+	public:
+		enum MouseButton
+		{
+			Left = 1,
+			Middle,
+			Right
+		};
+
+	public:
+		bool Initialize();
+		void Shutdown();
+
+		void Update();
+
+		bool GetKeyDown(int key) const { return m_keyStates[key]; }
+		bool GetPrevKeyDown(int key) const { return m_prevKeyStates[key]; }
+		bool GetKeyPressed(int key) const { return !m_prevKeyStates[key] && m_keyStates[key]; }
+		bool GetKeyReleased(int key) const { return m_prevKeyStates[key] && !m_keyStates[key]; }
+
+		bool GetMouseDown(int MouseButton) const { return false; }
+
+		Vector2 GetMousePos() const { return m_mousePos; }
+	private:
+		// keyboard
+		std::vector<bool> m_keyStates;
+		std::vector<bool> m_prevKeyStates;
+
+		// mouse
+		uint32_t m_buttonStates = 0;
+		uint32_t m_prevButtonStates = 0;
+
+		Vector2 m_mousePos{ 0,0 };
+	};
+}	
