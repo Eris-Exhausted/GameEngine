@@ -5,3 +5,5 @@
 
 #include "Random.h"
 #include "Vector2.h"
+#include "GameTime.h"
+#include "EngineMath.h"

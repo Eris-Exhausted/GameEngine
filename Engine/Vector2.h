@@ -33,6 +33,6 @@ namespace nu
 		Vector2& operator /= (float v){(this->x /= v, this->y /= v); return *this;}
 
 		float LengthSqr() const { return (x * x) + (y * y); }
-		float Length() const { return std::sqrt((x + x) + (y + y)); }
+		float Length() const { return std::sqrt((x * x) + (y * y)); }
 	};
 }
