@@ -7,3 +7,6 @@
 #include "Vector2.h"
 #include "GameTime.h"
 #include "EngineMath.h"
+
+#include "Transform.h"
+#include "Actor.h"
