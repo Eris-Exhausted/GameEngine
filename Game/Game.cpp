@@ -21,12 +21,14 @@ int main()
 
     Time time;
 
+    Mesh mesh{ {(0,0), (3,0), (3,3)}, (0,0,255)};
+
     Vector2 pos(640, 512);
     float speed = 800.0f;
     Vector2 vel(0.0f, 0.0f);
 
     std::vector<nu::Vector2> points;
-    Actor player{ Transform{Vector2{640.0f, 512.0f}, 0.0f, 50.0f} };
+    Actor player{ Transform{Vector2{640.0f, 512.0f}, 0.0f, 50.0f}, mesh };
 
     // MAIN LOOP
     bool quit = false;
