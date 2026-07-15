@@ -84,8 +84,8 @@ namespace nu {
     {
         for (auto mesh : model.GetMeshes())
         {
-            //SetColor(model.GetColor().x, model.GetColor().y, model.GetColor().z, 1.0f);
-            SetColor(255, 255, 255, 1.0f);
+            SetColor(mesh.GetColor().x, mesh.GetColor().y, mesh.GetColor().z, 1.0f);
+            //SetColor(255, 255, 255, 1.0f);
             auto& points = mesh.GetPoints();
             for (int i = 0; i + 1 < points.size(); i++)
             {

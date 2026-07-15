@@ -16,6 +16,7 @@ namespace nu
 
 	private:
 		std::vector<Mesh> m_meshes;
+		Vector3 m_color;
 	};
 
 

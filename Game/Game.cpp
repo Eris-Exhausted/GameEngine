@@ -9,7 +9,7 @@ using namespace nu;
 
 int main()
 {
-    
+
     // INITIALIZATION
     nu::Renderer renderer;
     float screenSizeX = 1280.0f;
@@ -21,14 +21,20 @@ int main()
 
     Time time;
 
-    Mesh mesh{ {(0,0), (3,0), (3,3)}, (0,0,255)};
+    Mesh mesh1(std::vector<Vector2>{Vector2(-3, -2), Vector2(2, 0), Vector2(-3, 2), Vector2(-1.5, 0), Vector2(-3, -2)},
+        Vector3{ 255,255,255 });
+    Mesh mesh2(std::vector<Vector2>{Vector2(-2, -2), Vector2(-2, 0), Vector2(0, 0), Vector2(0, -2), Vector2(-2,-2)},
+        Vector3{ 255,0,0 });
+    Model model;
+    model.AddMesh(mesh1);
+    model.AddMesh(mesh2);
 
     Vector2 pos(640, 512);
     float speed = 800.0f;
     Vector2 vel(0.0f, 0.0f);
 
     std::vector<nu::Vector2> points;
-    Actor player{ Transform{Vector2{640.0f, 512.0f}, 0.0f, 50.0f}, mesh };
+    Actor player{ Transform{Vector2{640.0f, 512.0f}, 0.0f, 50.0f}, model };
 
     // MAIN LOOP
     bool quit = false;
@@ -62,7 +68,7 @@ int main()
         {
             if (points.empty()) {
                 points.push_back(input.GetMousePos());
-                
+
             }
             else {
                 Vector2 v = points.back() - input.GetMousePos();
@@ -83,12 +89,6 @@ int main()
         player.SetVelocity(player.GetVelocity() + (force * time.GetDeltaTime()));
         player.Update(time.GetDeltaTime());
 
-        /*vel += (force * time.GetDeltaTime());
-        pos += (vel * time.GetDeltaTime());
-
-        pos.x = Wrap(0.0f, screenSizeX, pos.x);
-        pos.y = Wrap(0.0f, screenSizeY, pos.y);*/
-
         // RENDER
         renderer.SetColorInt(0, 0, 0);
         renderer.Clear();
@@ -97,7 +97,7 @@ int main()
             //renderer.SetColorInt(nu::RandInt(256), nu::RandInt(256), nu::RandInt(256));
             renderer.SetColorInt(0, 0, 255);
 
-            renderer.DrawLine(points[i].x, points[i].y, points[i-1].x, points[i-1].y);
+            renderer.DrawLine(points[i].x, points[i].y, points[i - 1].x, points[i - 1].y);
         }
 
         player.Draw(renderer);
