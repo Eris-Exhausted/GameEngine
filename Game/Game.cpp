@@ -62,9 +62,13 @@ int main()
     audio->createSound("clap.wav", FMOD_DEFAULT, 0, &sound);
     sounds.push_back(sound);
 
+    audio->createSound("cowbell.wav", FMOD_DEFAULT, 0, &sound);
+    sounds.push_back(sound);
+
     audio->createSound("test.wav", FMOD_DEFAULT, 0, &sound);
     sounds.push_back(sound);
-    audio->playSound(sounds[4], 0, false, nullptr);
+    audio->playSound(sounds[5], 0, false, nullptr);
+
 
     // MAIN LOOP
     bool quit = false;
@@ -126,6 +130,10 @@ int main()
         if (engine.GetInput().GetKeyPressed(SDL_SCANCODE_4))
         {
             audio->playSound(sounds[3], nullptr, false, nullptr);
+        }
+        if (engine.GetInput().GetKeyPressed(SDL_SCANCODE_5))
+        {
+            audio->playSound(sounds[4], nullptr, false, nullptr);
         }
 
         scene.Update(engine.GetTime().GetDeltaTime());
