@@ -2,8 +2,7 @@
 
 #include <iostream>
 #include <vector>
-
-// Random comment
+#include <fmod.hpp>
 
 using namespace nu;
 
@@ -11,30 +10,61 @@ int main()
 {
 
     // INITIALIZATION
+    engine.Initialize(1280.0f, 1024.0f);
+
     nu::Renderer renderer;
     float screenSizeX = 1280.0f;
     float screenSizeY = 1024.0f;
     renderer.Initialize("Game Engine", screenSizeX, screenSizeY);
 
-    Input input;
-    input.Initialize();
+    // create audio system
+    FMOD::System* audio;
+    FMOD::System_Create(&audio);
+
+    void* extradriverdata = nullptr;
+    audio->init(32, FMOD_INIT_NORMAL, extradriverdata);
+
+    /*Input input;
+    input.Initialize();*/
 
     Time time;
 
-    Mesh mesh1(std::vector<Vector2>{Vector2(-3, -2), Vector2(2, 0), Vector2(-3, 2), Vector2(-1.5, 0), Vector2(-3, -2)},
+    Mesh ship(std::vector<Vector2>{Vector2(-3, -2), Vector2(2, 0), Vector2(-3, 2), Vector2(-1.5, 0), Vector2(-3, -2)},
         Vector3{ 255,255,255 });
-    Mesh mesh2(std::vector<Vector2>{Vector2(-2, -2), Vector2(-2, 0), Vector2(0, 0), Vector2(0, -2), Vector2(-2,-2)},
+    Mesh flame(std::vector<Vector2>{Vector2(-4, -0), Vector2(-5, 1), Vector2(-7, 0), Vector2(-5, -1), Vector2(-4,0)},
         Vector3{ 255,0,0 });
     Model model;
-    model.AddMesh(mesh1);
-    model.AddMesh(mesh2);
+    model.AddMesh(ship);
+    model.AddMesh(flame);
 
     Vector2 pos(640, 512);
     float speed = 800.0f;
     Vector2 vel(0.0f, 0.0f);
 
     std::vector<nu::Vector2> points;
-    Actor player{ Transform{Vector2{640.0f, 512.0f}, 0.0f, 50.0f}, model };
+    Scene scene;
+
+    Player* player = new Player(2000.0f, Transform{ Vector2{640.0f, 512.0f}, 0.0f, 10.0f }, model);
+    scene.AddActor(player);
+
+    std::vector<FMOD::Sound*> sounds;
+
+    FMOD::Sound* sound = nullptr;
+    audio->createSound("snare.wav", FMOD_DEFAULT, 0, &sound);
+    sounds.push_back(sound);
+
+    audio->createSound("open-hat.wav", FMOD_DEFAULT, 0, &sound);
+    sounds.push_back(sound);
+
+    audio->createSound("close-hat.wav", FMOD_DEFAULT, 0, &sound);
+    sounds.push_back(sound);
+
+    audio->createSound("clap.wav", FMOD_DEFAULT, 0, &sound);
+    sounds.push_back(sound);
+
+    audio->createSound("test.wav", FMOD_DEFAULT, 0, &sound);
+    sounds.push_back(sound);
+    audio->playSound(sounds[4], 0, false, nullptr);
 
     // MAIN LOOP
     bool quit = false;
@@ -53,27 +83,22 @@ int main()
         }
 
         // engine
-        input.Update();
+        //input.Update();
         time.Tick();
+        engine.Update();
+        audio->update();
 
 
-        //This is the code for adding a single point per button press
-        //Left it commented it out since the ButtonDown code does effectively the same thing
-
-       /* if (input.GetButtonPressed(Input::MouseButton::Left)) {
-            points.push_back(input.GetMousePos());
-        }*/
-
-        if (input.GetButtonDown(Input::MouseButton::Left))
+        if (engine.GetInput().GetButtonDown(Input::MouseButton::Left))
         {
             if (points.empty()) {
-                points.push_back(input.GetMousePos());
+                points.push_back(engine.GetInput().GetMousePos());
 
             }
             else {
-                Vector2 v = points.back() - input.GetMousePos();
+                Vector2 v = points.back() - engine.GetInput().GetMousePos();
                 if (v.Length() > 10.0f) {
-                    points.push_back(input.GetMousePos());
+                    points.push_back(engine.GetInput().GetMousePos());
                 }
             }
         }
@@ -81,13 +106,29 @@ int main()
 
         Vector2 force(0.0f, 0.0f);
 
-        if (input.GetKeyDown(SDL_SCANCODE_A)) force.x = -speed;
-        if (input.GetKeyDown(SDL_SCANCODE_D)) force.x = speed;
-        if (input.GetKeyDown(SDL_SCANCODE_S)) force.y = speed;
-        if (input.GetKeyDown(SDL_SCANCODE_W)) force.y = -speed;
+        if (engine.GetInput().GetKeyDown(SDL_SCANCODE_A)) force.x = -speed;
+        if (engine.GetInput().GetKeyDown(SDL_SCANCODE_D)) force.x = speed;
+        if (engine.GetInput().GetKeyDown(SDL_SCANCODE_S)) force.y = speed;
+        if (engine.GetInput().GetKeyDown(SDL_SCANCODE_W)) force.y = -speed;
 
-        player.SetVelocity(player.GetVelocity() + (force * time.GetDeltaTime()));
-        player.Update(time.GetDeltaTime());
+        if (engine.GetInput().GetKeyPressed(SDL_SCANCODE_1))
+        {
+            audio->playSound(sounds[0], nullptr, false, nullptr);
+        }
+        if (engine.GetInput().GetKeyPressed(SDL_SCANCODE_2))
+        {
+            audio->playSound(sounds[1], nullptr, false, nullptr);
+        }
+        if (engine.GetInput().GetKeyPressed(SDL_SCANCODE_3))
+        {
+            audio->playSound(sounds[2], nullptr, false, nullptr);
+        }
+        if (engine.GetInput().GetKeyPressed(SDL_SCANCODE_4))
+        {
+            audio->playSound(sounds[3], nullptr, false, nullptr);
+        }
+
+        scene.Update(engine.GetTime().GetDeltaTime());
 
         // RENDER
         renderer.SetColorInt(0, 0, 0);
@@ -100,17 +141,13 @@ int main()
             renderer.DrawLine(points[i].x, points[i].y, points[i - 1].x, points[i - 1].y);
         }
 
-        player.Draw(renderer);
-        // character
-        //renderer.SetColorInt(255, 255, 255);
-        //renderer.DrawFillRect(pos.x - 20, pos.y - 20, 40, 40);
-        //renderer.DrawFillRect(input.GetMousePos().x - 20, input.GetMousePos().y - 20, 40, 40);
+        scene.Draw(renderer);
 
         renderer.Present();
     }
 
     // SHUTDOWN
-    renderer.ShutDown();
+    renderer.Shutdown();
 
     return 0;
 }

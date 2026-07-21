@@ -8,7 +8,7 @@ namespace nu
 	{
 	public:
 		bool Initialize(const char* name, int width, int height);
-		void ShutDown();
+		void Shutdown();
 
 		void SetColorInt(Uint8 r, Uint8 g, Uint8 b, Uint8 a = 255) const;
 		void SetColor(float r, float g, float b, float a = 1.0f) const;

@@ -18,7 +18,7 @@ namespace nu
             m_model{ model }
         {}
 
-        void Update(float dt);
+        virtual void Update(float dt);
         void Draw(const Renderer& renderer) const;
 
         const Transform& GetTransform() const { return m_transform; };

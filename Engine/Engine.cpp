@@ -1,13 +1,27 @@
-// Engine.cpp : Defines the functions for the static library.
-//
-
 #include "pch.h"
 #include "framework.h"
+#include "engine.h"
 
 #include <iostream>
 
-// TODO: This is an example of a library function
-void fnEngine()
+
+namespace nu
 {
-	std::cout << "Library.\n";
+    Engine engine;
+
+    bool Engine::Initialize(int resolution_x, int resolution_y) {
+        m_input.Initialize();
+        m_renderer.Initialize("Game Engine", resolution_x, resolution_y);
+        return true;
+    }
+
+    void Engine::Shutdown() {
+        m_input.Shutdown();
+        m_renderer.Shutdown();
+    }
+
+    void Engine::Update() {
+        m_input.Update();
+        m_time.Tick();
+    }
 }

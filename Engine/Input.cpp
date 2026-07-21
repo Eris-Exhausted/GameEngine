@@ -13,8 +13,6 @@ namespace nu {
 		std::copy(keyState, keyState + numKeys, m_keyStates.begin());
 		m_prevKeyStates = m_keyStates;
 
-		
-
 		return true;
 	}
 

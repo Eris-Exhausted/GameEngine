@@ -31,7 +31,7 @@ namespace nu {
         return true;
     }
 
-    void Renderer::ShutDown()
+    void Renderer::Shutdown()
     {
         SDL_DestroyRenderer(m_renderer);
         SDL_DestroyWindow(m_window);

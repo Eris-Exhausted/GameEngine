@@ -1,0 +1,29 @@
+#pragma once
+
+#include "Actor.h"
+#include "Input.h"
+
+
+namespace nu 
+{
+	class Player : public nu::Actor{
+	public:
+		Player() = default;
+		Player(float speed, const nu::Transform& transform) :
+			Actor(transform),
+			m_speed(speed)
+		{ }
+
+		Player(float speed, const nu::Transform& transform, const nu::Model&model) :
+			Actor(transform, model),
+			m_speed(speed)
+		{ }
+
+		virtual void Update(float dt) override;
+		void Draw(const Renderer& renderer) const;
+
+	private:
+		int m_ammo = 0;
+		float m_speed = 800.0f;
+	};
+}
