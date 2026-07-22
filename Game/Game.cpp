@@ -33,9 +33,14 @@ int main()
         Vector3{ 255,255,255 });
     Mesh flame(std::vector<Vector2>{Vector2(-4, -0), Vector2(-5, 1), Vector2(-7, 0), Vector2(-5, -1), Vector2(-4,0)},
         Vector3{ 255,0,0 });
-    Model model;
-    model.AddMesh(ship);
-    model.AddMesh(flame);
+    Mesh enemyShip(std::vector<Vector2>{Vector2(-2, -1), Vector2(1, 0), Vector2(-2, 1), Vector2(-2, -1)},
+        Vector3{ 255,0,0 });
+
+    Model playerModel;
+    Model enemyModel;
+    playerModel.AddMesh(ship);
+    playerModel.AddMesh(flame);
+    enemyModel.AddMesh(enemyShip);
 
     Vector2 pos(640, 512);
     float speed = 800.0f;
@@ -44,7 +49,9 @@ int main()
     std::vector<nu::Vector2> points;
     Scene scene;
 
-    Player* player = new Player(2000.0f, Transform{ Vector2{640.0f, 512.0f}, 0.0f, 10.0f }, model);
+    Player* player = new Player(2000.0f, Transform{ Vector2{640.0f, 512.0f}, 0.0f, 10.0f }, playerModel);
+    Enemy* enemy = new Enemy(2000.0f, Transform{ Vector2{640.0f, 512.0f}, 0.0f, 10.0f }, enemyModel);
+    scene.AddActor(enemy);
     scene.AddActor(player);
 
     std::vector<FMOD::Sound*> sounds;

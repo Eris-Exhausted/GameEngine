@@ -5,7 +5,6 @@
 
 namespace nu
 {
-	Input input;
 	void Player::Update(float dt) {
 
 		Vector2 force = Vector2(0, 0);

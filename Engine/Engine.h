@@ -12,6 +12,7 @@
 #include "Transform.h"
 #include "Actor.h"
 #include "Player.h"
+#include "Enemy.h"
 #include "Scene.h"
 
 namespace nu

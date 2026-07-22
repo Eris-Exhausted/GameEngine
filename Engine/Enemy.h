@@ -3,6 +3,7 @@
 #include "Actor.h"
 #include "Input.h"
 
+
 namespace nu
 {
 	class Enemy : public nu::Actor {
@@ -11,14 +12,16 @@ namespace nu
 		Enemy(float speed, const nu::Transform& transform) :
 			Actor(transform),
 			m_speed(speed)
-		{}
+		{
+		}
 
 		Enemy(float speed, const nu::Transform& transform, const nu::Model& model) :
 			Actor(transform, model),
 			m_speed(speed)
-		{}
+		{
+		}
 
-		void Update(float dt);
+		virtual void Update(float dt) override;
 		void Draw(const Renderer& renderer) const;
 
 	private:
