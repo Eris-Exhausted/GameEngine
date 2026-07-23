@@ -3,14 +3,66 @@
 #include <iostream>
 #include <vector>
 #include <fmod.hpp>
+#include "Assets.h"
+
+#define ENGINE Engine::Get()
 
 using namespace nu;
 
 int main()
 {
 
+    std::cout << "Directory Operations:\n";
+    std::cout << "Working directory: " << nu::GetWorkingDirectory() << "\n";
+
+    // set working directory (current working directory + "Assets")
+    std::cout << "Setting directory to 'Assets'...\n";
+    nu::SetWorkingDirectory("Assets");
+    std::cout << "New directory: " << nu::GetWorkingDirectory() << "\n\n";
+
+    // get filenames in the working directory
+    std::cout << "Files in Directory:\n";
+    auto filenames = nu::GetFilesInDirectory(nu::GetWorkingDirectory());
+    for (const auto& filename : filenames)
+    {
+        std::cout << filename << "\n";
+    }
+    std::cout << "\n";
+
+    // get filename info
+    if (!filenames.empty())
+    {
+        // get filename
+        std::string str = nu::GetFilename(filenames[0]);
+        std::cout << "Filename: " << str << "\n";
+
+        // get extension
+        str = nu::GetFileExtension(filenames[0]);
+        std::cout << "Extension: " << str << "\n";
+
+        // get filename no extension
+        str = nu::GetFilenameNoExtension(filenames[0]);
+        std::cout << "Filename No Extension: " << str << "\n\n";
+    }
+
+    // read and display text file
+    std::cout << "Text File Reading:\n";
+    std::string str;
+    if (nu::ReadTextFile("test.txt", str))
+    {
+        std::cout << str << "\n";
+    }
+
+    // write to text file
+    std::cout << "Text File Writing:\n";
+    nu::WriteTextFile("test.txt", "Hello, World!", true);
+    if (nu::ReadTextFile("test.txt", str))
+    {
+        std::cout << str << "\n";
+    }
+
     // INITIALIZATION
-    engine.Initialize(1280.0f, 1024.0f);
+    ENGINE.Initialize();
 
     nu::Renderer renderer;
     float screenSizeX = 1280.0f;
@@ -96,20 +148,20 @@ int main()
         // engine
         //input.Update();
         time.Tick();
-        engine.Update();
+        ENGINE.Update();
         audio->update();
 
 
-        if (engine.GetInput().GetButtonDown(Input::MouseButton::Left))
+        if (ENGINE.GetInput().GetButtonDown(Input::MouseButton::Left))
         {
             if (points.empty()) {
-                points.push_back(engine.GetInput().GetMousePos());
+                points.push_back(ENGINE.GetInput().GetMousePos());
 
             }
             else {
-                Vector2 v = points.back() - engine.GetInput().GetMousePos();
+                Vector2 v = points.back() - ENGINE.GetInput().GetMousePos();
                 if (v.Length() > 10.0f) {
-                    points.push_back(engine.GetInput().GetMousePos());
+                    points.push_back(ENGINE.GetInput().GetMousePos());
                 }
             }
         }
@@ -117,33 +169,33 @@ int main()
 
         Vector2 force(0.0f, 0.0f);
 
-        if (engine.GetInput().GetKeyDown(SDL_SCANCODE_A)) force.x = -speed;
-        if (engine.GetInput().GetKeyDown(SDL_SCANCODE_D)) force.x = speed;
-        if (engine.GetInput().GetKeyDown(SDL_SCANCODE_S)) force.y = speed;
-        if (engine.GetInput().GetKeyDown(SDL_SCANCODE_W)) force.y = -speed;
+        if (ENGINE.GetInput().GetKeyDown(SDL_SCANCODE_A)) force.x = -speed;
+        if (ENGINE.GetInput().GetKeyDown(SDL_SCANCODE_D)) force.x = speed;
+        if (ENGINE.GetInput().GetKeyDown(SDL_SCANCODE_S)) force.y = speed;
+        if (ENGINE.GetInput().GetKeyDown(SDL_SCANCODE_W)) force.y = -speed;
 
-        if (engine.GetInput().GetKeyPressed(SDL_SCANCODE_1))
+        if (ENGINE.GetInput().GetKeyPressed(SDL_SCANCODE_1))
         {
             audio->playSound(sounds[0], nullptr, false, nullptr);
         }
-        if (engine.GetInput().GetKeyPressed(SDL_SCANCODE_2))
+        if (ENGINE.GetInput().GetKeyPressed(SDL_SCANCODE_2))
         {
             audio->playSound(sounds[1], nullptr, false, nullptr);
         }
-        if (engine.GetInput().GetKeyPressed(SDL_SCANCODE_3))
+        if (ENGINE.GetInput().GetKeyPressed(SDL_SCANCODE_3))
         {
             audio->playSound(sounds[2], nullptr, false, nullptr);
         }
-        if (engine.GetInput().GetKeyPressed(SDL_SCANCODE_4))
+        if (ENGINE.GetInput().GetKeyPressed(SDL_SCANCODE_4))
         {
             audio->playSound(sounds[3], nullptr, false, nullptr);
         }
-        if (engine.GetInput().GetKeyPressed(SDL_SCANCODE_5))
+        if (ENGINE.GetInput().GetKeyPressed(SDL_SCANCODE_5))
         {
             audio->playSound(sounds[4], nullptr, false, nullptr);
         }
 
-        scene.Update(engine.GetTime().GetDeltaTime());
+        scene.Update(ENGINE.GetTime().GetDeltaTime());
 
         // RENDER
         renderer.SetColorInt(0, 0, 0);

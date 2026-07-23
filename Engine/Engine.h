@@ -14,12 +14,13 @@
 #include "Player.h"
 #include "Enemy.h"
 #include "Scene.h"
+#include "File.h"
 
 namespace nu
 {
     class Engine {
     public:
-        Engine() = default;
+        static Engine& Get() { static Engine engine; return engine; }
 
         bool Initialize(int resolution_x = 1280, int resolution_y = 720);
         void Shutdown();
@@ -31,10 +32,11 @@ namespace nu
         Time& GetTime() { return m_time; }
 
     private:
+        Engine() = default;
+
         Input m_input;
         Renderer m_renderer;
         Time m_time;
     };
 
-    extern Engine engine;
 }

@@ -13,7 +13,7 @@ namespace nu
 
 		float rotate = 0.0f;
 
-		SetVelocity(GetVelocity() + force * engine.GetTime().GetDeltaTime());
+		SetVelocity(GetVelocity() + force * Engine::Get().GetTime().GetDeltaTime());
 
 		SetRotation(m_transform.roation + rotate * dt);
 		Vector2 velocity{ 1,0 };

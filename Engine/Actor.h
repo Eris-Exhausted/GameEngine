@@ -8,6 +8,7 @@
 
 namespace nu
 {
+    class Scene;
     class Actor
     {
     public:
@@ -29,10 +30,15 @@ namespace nu
         Vector2& GetVelocity() { return m_vel; };
         void SetVelocity(const Vector2& velocity) { m_vel = velocity; };
 
+        Scene* GetScene() {return m_scene;}
+
+        friend Scene;
+
     protected:
         Transform m_transform;
         Vector2 m_vel{ 0,0 };
 
         Model m_model;
+        Scene* m_scene;
     };
  }

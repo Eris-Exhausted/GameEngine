@@ -7,7 +7,6 @@
 
 namespace nu
 {
-    Engine engine;
 
     bool Engine::Initialize(int resolution_x, int resolution_y) {
         m_input.Initialize();
